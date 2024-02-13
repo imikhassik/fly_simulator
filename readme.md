@@ -1,6 +1,6 @@
 # Fly Survival Simulator
 Survive the world as a fly.
 
-This is a WIP.
+<p align="center"> WIP
 
 ![title_screen](img/title_screen.png)
