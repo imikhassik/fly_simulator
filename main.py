@@ -25,12 +25,6 @@ class Player(pygame.sprite.Sprite):
         self.airborne = False
 
     def update(self):
-        pressed_keys = pygame.key.get_pressed()
-        if pressed_keys[pygame.K_e]:
-            self.airborne = True
-        if pressed_keys[pygame.K_q]:
-            self.airborne = False
-
         if self.airborne:
             self.fly()
         else:
@@ -96,6 +90,10 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        # toggle walk / fly mode
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_e:
+                player.airborne = not player.airborne
 
     # update
     all_sprites.update()
