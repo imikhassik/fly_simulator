@@ -1,5 +1,6 @@
 import pygame
 import os
+import random
 
 WIDTH = 600
 HEIGHT = 800
@@ -65,6 +66,26 @@ class Player(pygame.sprite.Sprite):
         self.rect.y += self.speed_y
 
 
+class Mob(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.Surface((30, 40))
+        self.image.fill(RED)
+        self.rect = self.image.get_rect()
+        self.rect.x = random.randrange(WIDTH - 30)
+        self.rect.y = random.randrange(-200, -30)
+        self.speed_y = random.randrange(2, 8)
+        self.speed_x = random.randrange(-3, 3)
+
+    def update(self):
+        self.rect.y += self.speed_y
+        self.rect.x += self.speed_x
+        if self.rect.top > HEIGHT + 10 or self.rect.left > WIDTH + 25 or self.rect.right < -25:
+            self.rect.x = random.randrange(WIDTH - 30)
+            self.rect.y = random.randrange(-100, -30)
+            self.speed_y = 5
+
+
 # set up assets directories
 game_dir = os.path.dirname(__file__)
 img_dir = os.path.join(game_dir, "img")
@@ -77,8 +98,17 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Fly Survival Simulator")
 
 all_sprites = pygame.sprite.Group()
+mobs = pygame.sprite.Group()
+
+# create player
 player = Player()
 all_sprites.add(player)
+
+# create mobs
+for i in range(8):
+    m = Mob()
+    all_sprites.add(m)
+    mobs.add(m)
 
 # game loop
 running = True
