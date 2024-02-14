@@ -31,15 +31,26 @@ class Player(pygame.sprite.Sprite):
         else:
             self.walk()
 
-        # wrap around screen
-        if self.rect.left > WIDTH:
-            self.rect.right = 0
-        if self.rect.right < 0:
-            self.rect.left = WIDTH
-        if self.rect.top > HEIGHT:
-            self.rect.bottom = 0
-        if self.rect.bottom < 0:
-            self.rect.top = HEIGHT
+        if self.airborne:
+            # wrap around screen
+            if self.rect.left > WIDTH:
+                self.rect.right = 0
+            if self.rect.right < 0:
+                self.rect.left = WIDTH
+            if self.rect.top > HEIGHT:
+                self.rect.bottom = 0
+            if self.rect.bottom < 0:
+                self.rect.top = HEIGHT
+        else:
+            # constrained by walls
+            if self.rect.right > WIDTH:
+                self.rect.right = WIDTH
+            if self.rect.left < 0:
+                self.rect.left = 0
+            if self.rect.bottom > HEIGHT:
+                self.rect.bottom = HEIGHT
+            if self.rect.top < 0:
+                self.rect.top = 0
 
     def walk(self):
         pressed_keys = pygame.key.get_pressed()
@@ -140,7 +151,6 @@ while running:
                         m.rect.y = random.randrange(-200, -50)
                         m.speed_y = 0
                         m.speed_x = 0
-
 
     # update
     all_sprites.update()
