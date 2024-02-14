@@ -53,6 +53,7 @@ class Player(pygame.sprite.Sprite):
             self.rect.y += 5
 
     def fly(self):
+        self.speed_y = -2
         pressed_keys = pygame.key.get_pressed()
         if pressed_keys[pygame.K_a]:
             self.speed_x = -5
@@ -73,17 +74,20 @@ class Mob(pygame.sprite.Sprite):
         self.image.fill(RED)
         self.rect = self.image.get_rect()
         self.rect.x = random.randrange(WIDTH - 30)
-        self.rect.y = random.randrange(-200, -30)
-        self.speed_y = random.randrange(2, 8)
-        self.speed_x = random.randrange(-3, 3)
+        self.rect.y = random.randrange(-200, -50)
+        self.speed_y = 0
+        self.speed_x = 0
 
     def update(self):
         self.rect.y += self.speed_y
         self.rect.x += self.speed_x
+
+        # reset position and speed after a mob has moved off the screen
         if self.rect.top > HEIGHT + 10 or self.rect.left > WIDTH + 25 or self.rect.right < -25:
             self.rect.x = random.randrange(WIDTH - 30)
-            self.rect.y = random.randrange(-100, -30)
-            self.speed_y = 5
+            self.rect.y = random.randrange(-200, -50)
+            self.speed_y = random.randrange(2, 8)
+            self.speed_x = random.randrange(-3, 3)
 
 
 # set up assets directories
@@ -124,6 +128,19 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_e:
                 player.airborne = not player.airborne
+                if player.airborne:
+                    # mobs start moving
+                    for m in mobs:
+                        m.speed_y = random.randrange(2, 8)
+                        m.speed_x = random.randrange(-3, 3)
+                else:
+                    # mobs go back up and stop moving
+                    for m in mobs:
+                        m.rect.x = random.randrange(WIDTH - 30)
+                        m.rect.y = random.randrange(-200, -50)
+                        m.speed_y = 0
+                        m.speed_x = 0
+
 
     # update
     all_sprites.update()
