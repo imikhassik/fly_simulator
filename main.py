@@ -28,29 +28,10 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         if self.airborne:
             self.fly()
+            self.unconstrain()
         else:
             self.walk()
-
-        if self.airborne:
-            # wrap around screen
-            if self.rect.left > WIDTH:
-                self.rect.right = 0
-            if self.rect.right < 0:
-                self.rect.left = WIDTH
-            if self.rect.top > HEIGHT:
-                self.rect.bottom = 0
-            if self.rect.bottom < 0:
-                self.rect.top = HEIGHT
-        else:
-            # constrained by walls
-            if self.rect.right > WIDTH:
-                self.rect.right = WIDTH
-            if self.rect.left < 0:
-                self.rect.left = 0
-            if self.rect.bottom > HEIGHT:
-                self.rect.bottom = HEIGHT
-            if self.rect.top < 0:
-                self.rect.top = 0
+            self.constrain()
 
     def walk(self):
         pressed_keys = pygame.key.get_pressed()
@@ -76,6 +57,28 @@ class Player(pygame.sprite.Sprite):
             self.speed_y = 5
         self.rect.x += self.speed_x
         self.rect.y += self.speed_y
+
+    def constrain(self):
+        # constrained by screen boundaries
+        if self.rect.right > WIDTH:
+            self.rect.right = WIDTH
+        if self.rect.left < 0:
+            self.rect.left = 0
+        if self.rect.bottom > HEIGHT:
+            self.rect.bottom = HEIGHT
+        if self.rect.top < 0:
+            self.rect.top = 0
+
+    def unconstrain(self):
+        # wrap around screen
+        if self.rect.left > WIDTH:
+            self.rect.right = 0
+        if self.rect.right < 0:
+            self.rect.left = WIDTH
+        if self.rect.top > HEIGHT:
+            self.rect.bottom = 0
+        if self.rect.bottom < 0:
+            self.rect.top = HEIGHT
 
 
 class Mob(pygame.sprite.Sprite):
