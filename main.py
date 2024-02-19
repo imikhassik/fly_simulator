@@ -18,7 +18,7 @@ YELLOW = (255, 255, 0)
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.image.load(os.path.join(img_dir, "fly_white_small.png")).convert()
+        self.image = fly_image
         self.image.set_colorkey(WHITE)
         self.rect = self.image.get_rect()
         self.rect.center = WIDTH / 2, HEIGHT / 2
@@ -85,8 +85,9 @@ class Player(pygame.sprite.Sprite):
 class Mob(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.Surface((30, 40))
-        self.image.fill(RED)
+        self.image = pygame.transform.rotate(enemy_fly_image, 180)
+
+        self.image.set_colorkey(WHITE)
         self.rect = self.image.get_rect()
         self.rect.x = random.randrange(WIDTH - 30)
         self.rect.y = random.randrange(-200, -50)
@@ -108,8 +109,8 @@ class Mob(pygame.sprite.Sprite):
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
-        self.image = pygame.Surface((5, 10))
-        self.image.fill(GREEN)
+        self.image = bullet_image
+        self.image.set_colorkey(WHITE)
         self.rect = self.image.get_rect()
         self.rect.center = x
         self.rect.bottom = y
@@ -131,6 +132,11 @@ pygame.mixer.init()
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Fly Survival Simulator")
+
+# load game graphics
+fly_image = pygame.image.load(os.path.join(img_dir, "fly_white_small.png")).convert()
+enemy_fly_image = pygame.image.load(os.path.join(img_dir, "fly_enemy_small.png")).convert()
+bullet_image = pygame.image.load(os.path.join(img_dir, "bullet_small.png")).convert()
 
 all_sprites = pygame.sprite.Group()
 mobs = pygame.sprite.Group()
