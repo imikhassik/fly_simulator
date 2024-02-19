@@ -12,6 +12,7 @@ WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
+YELLOW = (255, 255, 0)
 
 
 class Player(pygame.sprite.Sprite):
@@ -27,11 +28,11 @@ class Player(pygame.sprite.Sprite):
 
     def update(self):
         if self.airborne:
-            self.fly()
             self.unconstrain()
+            self.fly()
         else:
-            self.walk()
             self.constrain()
+            self.walk()
 
     def walk(self):
         pressed_keys = pygame.key.get_pressed()
@@ -104,6 +105,22 @@ class Mob(pygame.sprite.Sprite):
             self.speed_x = random.randrange(-3, 3)
 
 
+class Bullet(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+        self.image = pygame.Surface((5, 10))
+        self.image.fill(GREEN)
+        self.rect = self.image.get_rect()
+        self.rect.center = x
+        self.rect.bottom = y
+        self.speed_y = 8
+
+    def update(self):
+        self.rect.y -= self.speed_y
+        if self.rect.y < 0:
+            self.kill()
+
+
 # set up assets directories
 game_dir = os.path.dirname(__file__)
 img_dir = os.path.join(game_dir, "img")
@@ -117,12 +134,13 @@ pygame.display.set_caption("Fly Survival Simulator")
 
 all_sprites = pygame.sprite.Group()
 mobs = pygame.sprite.Group()
+bullets = pygame.sprite.Group()
 
 # create player
 player = Player()
 all_sprites.add(player)
 
-# create mobs
+# generate mobs
 for i in range(8):
     m = Mob()
     all_sprites.add(m)
@@ -154,6 +172,25 @@ while running:
                         m.rect.y = random.randrange(-200, -50)
                         m.speed_y = 0
                         m.speed_x = 0
+            # shoot with space bar
+            if event.key == pygame.K_SPACE:
+                b = Bullet(player.rect.center, player.rect.top)
+                all_sprites.add(b)
+                bullets.add(b)
+
+    # detect player collision with mob(s) and terminate
+    hits = pygame.sprite.spritecollide(player, mobs, True)
+    if hits:
+        running = False
+
+    # detect bullet - mob collision and eliminate both
+    hits = pygame.sprite.groupcollide(mobs, bullets, True, True)
+    for hit in hits:
+        m = Mob()
+        all_sprites.add(m)
+        mobs.add(m)
+        m.speed_y = random.randrange(2, 8)
+        m.speed_x = random.randrange(-3, 3)
 
     # update
     all_sprites.update()
