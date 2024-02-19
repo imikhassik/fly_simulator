@@ -90,7 +90,7 @@ class Mob(pygame.sprite.Sprite):
         self.image.set_colorkey(WHITE)
         self.rect = self.image.get_rect()
         self.rect.x = random.randrange(WIDTH - 30)
-        self.rect.y = random.randrange(-200, -50)
+        self.rect.y = random.randrange(-200, -80)
         self.speed_y = 0
         self.speed_x = 0
 
@@ -101,7 +101,7 @@ class Mob(pygame.sprite.Sprite):
         # reset position and speed after a mob has moved off the screen
         if self.rect.top > HEIGHT + 10 or self.rect.left > WIDTH + 25 or self.rect.right < -25:
             self.rect.x = random.randrange(WIDTH - 30)
-            self.rect.y = random.randrange(-200, -50)
+            self.rect.y = random.randrange(-200, -80)
             self.speed_y = random.randrange(2, 8)
             self.speed_x = random.randrange(-3, 3)
 
