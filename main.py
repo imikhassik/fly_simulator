@@ -97,7 +97,7 @@ class Mob(pygame.sprite.Sprite):
         self.speed_y = 0
         self.speed_x = 0
         self.rotation = 0
-        self.angle = random.randrange(-8, 8)
+        self.rotation_speed = random.randrange(-8, 8)
         self.last_update = pygame.time.get_ticks()
 
     def update(self):
@@ -123,7 +123,7 @@ class Mob(pygame.sprite.Sprite):
         if now - self.last_update > 50:
             # get new rotation image every 50 milliseconds
             self.last_update = now
-            self.rotation = (self.rotation + self.angle) % 360
+            self.rotation = (self.rotation + self.rotation_speed) % 360
             new_image = pygame.transform.rotate(self.image_orig, self.rotation)
             old_center = self.rect.center
             self.image = new_image
