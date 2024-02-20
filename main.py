@@ -21,6 +21,8 @@ class Player(pygame.sprite.Sprite):
         self.image = fly_image
         self.image.set_colorkey(WHITE)
         self.rect = self.image.get_rect()
+        self.radius = int(self.rect.width * .65 / 2)
+        # pygame.draw.circle(self.image, RED, self.rect.center, self.radius)
         self.rect.center = WIDTH / 2, HEIGHT / 2
         self.speed_y = 0
         self.speed_x = 0
@@ -86,9 +88,10 @@ class Mob(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.image = pygame.transform.rotate(enemy_fly_image, 180)
-
         self.image.set_colorkey(WHITE)
         self.rect = self.image.get_rect()
+        self.radius = int(self.rect.width * .65 / 2)
+        # pygame.draw.circle(self.image, RED, self.rect.center, self.radius)
         self.rect.x = random.randrange(WIDTH - 30)
         self.rect.y = random.randrange(-200, -80)
         self.speed_y = 0
@@ -112,6 +115,8 @@ class Bullet(pygame.sprite.Sprite):
         self.image = bullet_image
         self.image.set_colorkey(WHITE)
         self.rect = self.image.get_rect()
+        self.radius = int(self.rect.width / 2)
+        # pygame.draw.circle(self.image, RED, self.rect.center, self.radius)
         self.rect.center = x
         self.rect.bottom = y
         self.speed_y = 8
@@ -185,12 +190,12 @@ while running:
                 bullets.add(b)
 
     # detect player collision with mob(s) and terminate
-    hits = pygame.sprite.spritecollide(player, mobs, True)
+    hits = pygame.sprite.spritecollide(player, mobs, True, pygame.sprite.collide_circle)
     if hits:
         running = False
 
     # detect bullet - mob collision and eliminate both
-    hits = pygame.sprite.groupcollide(mobs, bullets, True, True)
+    hits = pygame.sprite.groupcollide(mobs, bullets, True, True, pygame.sprite.collide_circle)
     for hit in hits:
         m = Mob()
         all_sprites.add(m)
