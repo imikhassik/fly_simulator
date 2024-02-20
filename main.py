@@ -87,16 +87,21 @@ class Player(pygame.sprite.Sprite):
 class Mob(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.transform.rotate(enemy_fly_image, 180)
-        self.image.set_colorkey(WHITE)
+        self.image_orig = pygame.transform.rotate(enemy_fly_image, 180)
+        self.image_orig.set_colorkey(WHITE)
+        self.image = self.image_orig
         self.rect = self.image.get_rect()
         self.radius = int(self.rect.width * .65 / 2)
         # pygame.draw.circle(self.image, RED, self.rect.center, self.radius)
         self.generate_coords()
         self.speed_y = 0
         self.speed_x = 0
+        self.rotation = 0
+        self.angle = random.randrange(-8, 8)
+        self.last_update = pygame.time.get_ticks()
 
     def update(self):
+        # self.rotate()
         self.rect.y += self.speed_y
         self.rect.x += self.speed_x
 
@@ -112,6 +117,18 @@ class Mob(pygame.sprite.Sprite):
     def generate_speed(self):
         self.speed_y = random.randrange(2, 8)
         self.speed_x = random.randrange(-3, 3)
+
+    def rotate(self):
+        now = pygame.time.get_ticks()
+        if now - self.last_update > 50:
+            # get new rotation image every 50 milliseconds
+            self.last_update = now
+            self.rotation = (self.rotation + self.angle) % 360
+            new_image = pygame.transform.rotate(self.image_orig, self.rotation)
+            old_center = self.rect.center
+            self.image = new_image
+            self.rect = self.image.get_rect()
+            self.rect.center = old_center
 
 
 class Bullet(pygame.sprite.Sprite):
