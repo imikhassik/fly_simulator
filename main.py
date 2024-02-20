@@ -92,8 +92,7 @@ class Mob(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.radius = int(self.rect.width * .65 / 2)
         # pygame.draw.circle(self.image, RED, self.rect.center, self.radius)
-        self.rect.x = random.randrange(WIDTH - 30)
-        self.rect.y = random.randrange(-200, -80)
+        self.generate_coords()
         self.speed_y = 0
         self.speed_x = 0
 
@@ -103,10 +102,16 @@ class Mob(pygame.sprite.Sprite):
 
         # reset position and speed after a mob has moved off the screen
         if self.rect.top > HEIGHT + 10 or self.rect.left > WIDTH + 25 or self.rect.right < -25:
-            self.rect.x = random.randrange(WIDTH - 30)
-            self.rect.y = random.randrange(-200, -80)
-            self.speed_y = random.randrange(2, 8)
-            self.speed_x = random.randrange(-3, 3)
+            self.generate_coords()
+            self.generate_speed()
+
+    def generate_coords(self):
+        self.rect.x = random.randrange(WIDTH - 71)
+        self.rect.y = random.randrange(-280, -80)
+
+    def generate_speed(self):
+        self.speed_y = random.randrange(2, 8)
+        self.speed_x = random.randrange(-3, 3)
 
 
 class Bullet(pygame.sprite.Sprite):
@@ -174,13 +179,11 @@ while running:
                 if player.airborne:
                     # mobs start moving
                     for m in mobs:
-                        m.speed_y = random.randrange(2, 8)
-                        m.speed_x = random.randrange(-3, 3)
+                        m.generate_speed()
                 else:
                     # mobs go back up and stop moving
                     for m in mobs:
-                        m.rect.x = random.randrange(WIDTH - 30)
-                        m.rect.y = random.randrange(-200, -50)
+                        m.generate_coords()
                         m.speed_y = 0
                         m.speed_x = 0
             # shoot with space bar
@@ -200,8 +203,7 @@ while running:
         m = Mob()
         all_sprites.add(m)
         mobs.add(m)
-        m.speed_y = random.randrange(2, 8)
-        m.speed_x = random.randrange(-3, 3)
+        m.generate_speed()
 
     # update
     all_sprites.update()
