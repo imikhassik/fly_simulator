@@ -1,4 +1,6 @@
-# pop sounds by https://creatorassets.com/a/pop-sound-effects
+# art original by Ilya Mikhasik
+# pop sounds from https://creatorassets.com/a/pop-sound-effects
+# spit sounds from https://opengameart.org/content/80-cc0-creature-sfx
 
 import pygame
 import os
@@ -89,6 +91,7 @@ class Player(pygame.sprite.Sprite):
         b = Bullet(player.rect.center, player.rect.top)
         all_sprites.add(b)
         bullets.add(b)
+        spit_sound.play()
 
 
 class Mob(pygame.sprite.Sprite):
@@ -180,6 +183,8 @@ for image_name in enemy_image_names:
     enemy_images.append(pygame.image.load(os.path.join(img_dir, image_name)).convert())
 
 # load sounds
+spit_sound = pygame.mixer.Sound(os.path.join(snd_dir, "spit-small.ogg"))
+spit_sound.set_volume(0.1)
 pop_sound_files = ["pop-1.mp3", "pop-6.mp3", "pop-7.mp3"]
 pop_sounds = []
 for pop in pop_sound_files:
