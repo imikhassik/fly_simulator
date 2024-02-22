@@ -1,3 +1,5 @@
+# pop sounds by https://creatorassets.com/a/pop-sound-effects
+
 import pygame
 import os
 import random
@@ -165,6 +167,7 @@ pygame.display.set_caption("Fly Survival Simulator")
 # set up assets directories
 game_dir = os.path.dirname(__file__)
 img_dir = os.path.join(game_dir, "img")
+snd_dir = os.path.join(game_dir, "snd")
 
 # load game graphics
 fly_image = pygame.image.load(os.path.join(img_dir, "fly_white_small.png")).convert()
@@ -175,6 +178,12 @@ enemy_image_names = ["fly_enemy_small.png", "fly_enemy_small_1.png",
 enemy_images = []
 for image_name in enemy_image_names:
     enemy_images.append(pygame.image.load(os.path.join(img_dir, image_name)).convert())
+
+# load sounds
+pop_sound_files = ["pop-1.mp3", "pop-6.mp3", "pop-7.mp3"]
+pop_sounds = []
+for pop in pop_sound_files:
+    pop_sounds.append(pygame.mixer.Sound(os.path.join(snd_dir, pop)))
 
 
 # sprite groups
@@ -229,6 +238,8 @@ while running:
     # detect bullet - mob collision and eliminate both
     hits = pygame.sprite.groupcollide(mobs, bullets, True, True, pygame.sprite.collide_circle)
     for hit in hits:
+        pop_sound = random.choice(pop_sounds)
+        pop_sound.play()
         m = Mob()
         all_sprites.add(m)
         mobs.add(m)
