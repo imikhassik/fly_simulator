@@ -83,6 +83,11 @@ class Player(pygame.sprite.Sprite):
         if self.rect.bottom < 0:
             self.rect.top = HEIGHT
 
+    def shoot(self):
+        b = Bullet(player.rect.center, player.rect.top)
+        all_sprites.add(b)
+        bullets.add(b)
+
 
 class Mob(pygame.sprite.Sprite):
     def __init__(self):
@@ -214,9 +219,7 @@ while running:
                         m.speed_x = 0
             # shoot with space bar
             if event.key == pygame.K_SPACE:
-                b = Bullet(player.rect.center, player.rect.top)
-                all_sprites.add(b)
-                bullets.add(b)
+                player.shoot()
 
     # detect player collision with mob(s) and terminate
     hits = pygame.sprite.spritecollide(player, mobs, True, pygame.sprite.collide_circle)
