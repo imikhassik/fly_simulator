@@ -87,7 +87,7 @@ class Player(pygame.sprite.Sprite):
 class Mob(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image_orig = pygame.transform.rotate(enemy_fly_image, 180)
+        self.image_orig = pygame.transform.rotate(random.choice(enemy_images), 180)
         self.image_orig.set_colorkey(WHITE)
         self.image = self.image_orig
         self.rect = self.image.get_rect()
@@ -149,10 +149,6 @@ class Bullet(pygame.sprite.Sprite):
             self.kill()
 
 
-# set up assets directories
-game_dir = os.path.dirname(__file__)
-img_dir = os.path.join(game_dir, "img")
-
 # initialize the game and create window
 pygame.init()
 pygame.mixer.init()
@@ -160,11 +156,23 @@ clock = pygame.time.Clock()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Fly Survival Simulator")
 
+
+# set up assets directories
+game_dir = os.path.dirname(__file__)
+img_dir = os.path.join(game_dir, "img")
+
 # load game graphics
 fly_image = pygame.image.load(os.path.join(img_dir, "fly_white_small.png")).convert()
-enemy_fly_image = pygame.image.load(os.path.join(img_dir, "fly_enemy_small.png")).convert()
 bullet_image = pygame.image.load(os.path.join(img_dir, "bullet_small.png")).convert()
 
+enemy_image_names = ["fly_enemy_small.png", "fly_enemy_small_1.png",
+                     "fly_enemy_small_2.png", "fly_enemy_small_3.png"]
+enemy_images = []
+for image_name in enemy_image_names:
+    enemy_images.append(pygame.image.load(os.path.join(img_dir, image_name)).convert())
+
+
+# sprite groups
 all_sprites = pygame.sprite.Group()
 mobs = pygame.sprite.Group()
 bullets = pygame.sprite.Group()
@@ -178,6 +186,7 @@ for i in range(8):
     m = Mob()
     all_sprites.add(m)
     mobs.add(m)
+
 
 # game loop
 running = True
