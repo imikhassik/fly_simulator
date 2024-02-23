@@ -1,6 +1,7 @@
 # art original by Ilya Mikhasik
 # pop sounds from https://creatorassets.com/a/pop-sound-effects
 # spit sounds from https://opengameart.org/content/80-cc0-creature-sfx
+# music by pixelsphere.org / The Cynic Project
 
 import pygame
 import os
@@ -189,6 +190,10 @@ pop_sound_files = ["pop-1.mp3", "pop-6.mp3", "pop-7.mp3"]
 pop_sounds = []
 for pop in pop_sound_files:
     pop_sounds.append(pygame.mixer.Sound(os.path.join(snd_dir, pop)))
+
+# background music
+pygame.mixer.music.load(os.path.join(snd_dir, "background.mp3"))
+pygame.mixer.music.play(loops=-1)
 
 
 # sprite groups
