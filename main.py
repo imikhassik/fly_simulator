@@ -23,8 +23,9 @@ YELLOW = (255, 255, 0)
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = fly_image
-        self.image.set_colorkey(WHITE)
+        self.image_orig = fly_image
+        self.image_orig.set_colorkey(WHITE)
+        self.image = self.image_orig
         self.rect = self.image.get_rect()
         self.radius = int(self.rect.width * .65 / 2)
         # pygame.draw.circle(self.image, RED, self.rect.center, self.radius)
@@ -32,6 +33,7 @@ class Player(pygame.sprite.Sprite):
         self.speed_y = 0
         self.speed_x = 0
         self.airborne = False
+        self.rotation = 0
 
     def update(self):
         if self.airborne:
@@ -44,13 +46,20 @@ class Player(pygame.sprite.Sprite):
     def walk(self):
         pressed_keys = pygame.key.get_pressed()
         if pressed_keys[pygame.K_a]:
+            self.rotation = 90
             self.rect.x -= 5
         if pressed_keys[pygame.K_d]:
+            self.rotation = 270
             self.rect.x += 5
         if pressed_keys[pygame.K_w]:
+            self.rotation = 0
             self.rect.y -= 5
         if pressed_keys[pygame.K_s]:
+            self.rotation = 180
             self.rect.y += 5
+
+        new_image = pygame.transform.rotate(self.image_orig, self.rotation)
+        self.image = new_image
 
     def fly(self):
         self.speed_y = -2
