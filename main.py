@@ -200,6 +200,7 @@ pop_sound_files = ["pop-1.mp3", "pop-6.mp3", "pop-7.mp3"]
 pop_sounds = []
 for pop in pop_sound_files:
     pop_sounds.append(pygame.mixer.Sound(os.path.join(snd_dir, pop)))
+buzz = pygame.mixer.Sound(os.path.join(snd_dir, "buzz.ogg"))
 
 # background music
 pygame.mixer.music.load(os.path.join(snd_dir, "background.mp3"))
@@ -238,10 +239,12 @@ while running:
                 player.airborne = not player.airborne
                 if player.airborne:
                     # mobs start moving
+                    buzz.play(loops=-1)
                     for m in mobs:
                         m.generate_speed()
                 else:
                     # mobs go back up and stop moving
+                    buzz.stop()
                     for m in mobs:
                         m.generate_coords()
                         m.speed_y = 0
