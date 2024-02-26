@@ -98,10 +98,11 @@ class Player(pygame.sprite.Sprite):
             self.rect.top = HEIGHT
 
     def shoot(self):
-        b = Bullet(player.rect.center, player.rect.top)
-        all_sprites.add(b)
-        bullets.add(b)
-        spit_sound.play()
+        if not len(bullets):
+            b = Bullet(player.rect.center, player.rect.top)
+            all_sprites.add(b)
+            bullets.add(b)
+            spit_sound.play()
 
 
 class Mob(pygame.sprite.Sprite):
