@@ -1,6 +1,7 @@
 # art original by Ilya Mikhasik
 # pop sounds from https://creatorassets.com/a/pop-sound-effects
 # spit sounds from https://opengameart.org/content/80-cc0-creature-sfx
+# buzz sound from https://www.youtube.com/watch?v=t4_5P_sWGyA
 # music by pixelsphere.org / The Cynic Project
 
 import pygame
@@ -195,7 +196,7 @@ for image_name in enemy_image_names:
 
 # load sounds
 spit_sound = pygame.mixer.Sound(os.path.join(snd_dir, "spit-small.ogg"))
-spit_sound.set_volume(0.1)
+spit_sound.set_volume(0.2)
 pop_sound_files = ["pop-1.mp3", "pop-6.mp3", "pop-7.mp3"]
 pop_sounds = []
 for pop in pop_sound_files:
@@ -238,12 +239,12 @@ while running:
             if event.key == pygame.K_e:
                 player.airborne = not player.airborne
                 if player.airborne:
-                    # mobs start moving
+                    # mobs start moving and buzzing starts
                     buzz.play(loops=-1)
                     for m in mobs:
                         m.generate_speed()
                 else:
-                    # mobs go back up and stop moving
+                    # mobs go back up and stop moving, buzzing stops
                     buzz.stop()
                     for m in mobs:
                         m.generate_coords()
