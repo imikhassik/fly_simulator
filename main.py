@@ -22,8 +22,7 @@ YELLOW = (255, 255, 0)
 
 
 def draw_text(surf, text, size, x, y):
-    font_name = pygame.font.match_font('tahoma')
-    font = pygame.font.Font(font_name, size)
+    font = pygame.font.Font(os.path.join(font_dir, "Nums-Regular.ttf.otf"), size)
     text_surface = font.render(text, True, BLACK)
     text_rect = text_surface.get_rect()
     text_rect.midtop = (x, y)
@@ -196,6 +195,7 @@ pygame.display.set_caption("Fly Survival Simulator")
 game_dir = os.path.dirname(__file__)
 img_dir = os.path.join(game_dir, "img")
 snd_dir = os.path.join(game_dir, "snd")
+font_dir = os.path.join(game_dir, "fonts")
 
 # load game graphics
 fly_image = pygame.image.load(os.path.join(img_dir, "fly_white_small.png")).convert()
@@ -290,7 +290,7 @@ while running:
     # draw / render
     screen.fill(WHITE)
     all_sprites.draw(screen)
-    draw_text(screen, str(score), 18, WIDTH / 2, 10)
+    draw_text(screen, str(score), 25, WIDTH / 2, 10)
     # flip the display *after* everything is drawn
     pygame.display.flip()
 
