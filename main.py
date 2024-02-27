@@ -21,6 +21,15 @@ BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
 
 
+def draw_text(surf, text, size, x, y):
+    font_name = pygame.font.match_font('tahoma')
+    font = pygame.font.Font(font_name, size)
+    text_surface = font.render(text, True, BLACK)
+    text_rect = text_surface.get_rect()
+    text_rect.midtop = (x, y)
+    surf.blit(text_surface, text_rect)
+
+
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
@@ -64,6 +73,10 @@ class Player(pygame.sprite.Sprite):
 
     def fly(self):
         self.speed_y = -2
+        self.rotation = 0
+        new_image = pygame.transform.rotate(self.image_orig, self.rotation)
+        self.image = new_image
+
         pressed_keys = pygame.key.get_pressed()
         if pressed_keys[pygame.K_a]:
             self.speed_x = -5
@@ -223,6 +236,7 @@ for i in range(8):
     all_sprites.add(m)
     mobs.add(m)
 
+score = 0
 
 # game loop
 running = True
@@ -262,6 +276,7 @@ while running:
     # detect bullet - mob collision and eliminate both
     hits = pygame.sprite.groupcollide(mobs, bullets, True, True, pygame.sprite.collide_circle)
     for hit in hits:
+        score += 1
         pop_sound = random.choice(pop_sounds)
         pop_sound.play()
         m = Mob()
@@ -275,6 +290,7 @@ while running:
     # draw / render
     screen.fill(WHITE)
     all_sprites.draw(screen)
+    draw_text(screen, str(score), 18, WIDTH / 2, 10)
     # flip the display *after* everything is drawn
     pygame.display.flip()
 
