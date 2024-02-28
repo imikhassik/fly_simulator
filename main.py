@@ -28,11 +28,26 @@ def draw_text(surf, text, size, x, y):
     text_rect.midtop = (x, y)
     surf.blit(text_surface, text_rect)
 
+
 def spawn_mob():
     m = Mob()
     all_sprites.add(m)
     mobs.add(m)
     return m
+
+
+def draw_fuel_bar(surf, x, y, pct):
+    if pct < 0:
+        pct = 0
+
+    BAR_LENGTH = 100
+    BAR_HEIGHT = 10
+
+    fill = (pct / 100) * BAR_LENGTH
+    outline_rect = pygame.Rect(x, y, BAR_LENGTH, BAR_HEIGHT)
+    fill_rect = pygame.Rect(x, y, fill, BAR_HEIGHT)
+    pygame.draw.rect(surf, YELLOW, fill_rect)
+    pygame.draw.rect(surf, BLACK, outline_rect, 2)
 
 
 class Player(pygame.sprite.Sprite):
@@ -49,8 +64,16 @@ class Player(pygame.sprite.Sprite):
         self.speed_x = 0
         self.airborne = False
         self.rotation = 0
+        self.last_update = pygame.time.get_ticks()
+        self.fuel = 100
 
     def update(self):
+        now = pygame.time.get_ticks()
+        # fuel goes down 1% every 1 second
+        if now - self.last_update >= 1000:
+            self.last_update = now
+            self.fuel -= 1
+
         if self.airborne:
             self.unconstrain()
             self.fly()
@@ -293,6 +316,7 @@ while running:
     screen.fill(WHITE)
     all_sprites.draw(screen)
     draw_text(screen, str(score), 25, WIDTH / 2, 10)
+    draw_fuel_bar(screen, 5, 5, player.fuel)
     # flip the display *after* everything is drawn
     pygame.display.flip()
 
