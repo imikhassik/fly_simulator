@@ -28,6 +28,12 @@ def draw_text(surf, text, size, x, y):
     text_rect.midtop = (x, y)
     surf.blit(text_surface, text_rect)
 
+def spawn_mob():
+    m = Mob()
+    all_sprites.add(m)
+    mobs.add(m)
+    return m
+
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
@@ -232,9 +238,7 @@ all_sprites.add(player)
 
 # generate mobs
 for i in range(8):
-    m = Mob()
-    all_sprites.add(m)
-    mobs.add(m)
+    spawn_mob()
 
 score = 0
 
@@ -279,9 +283,7 @@ while running:
         score += 1
         pop_sound = random.choice(pop_sounds)
         pop_sound.play()
-        m = Mob()
-        all_sprites.add(m)
-        mobs.add(m)
+        m = spawn_mob()
         m.generate_speed()
 
     # update
